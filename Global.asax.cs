@@ -1,4 +1,4 @@
-﻿using ConferenceDashborad.Models;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace ConferenceDashborad
         }
         protected void SimpleMembershipInitializer()
         {
-            using (var context = new UsersContext())
+            using (var context = new ConferenceDashborad.Models.UsersContext())
                 context.UserProfiles.Find(1);
 
             if (!WebSecurity.Initialized)
