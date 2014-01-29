@@ -73,6 +73,9 @@
                  data: { "data": data },
                  //traditional: true,
                  success: function (ajaxresult) {
+                     if (ajaxresult.data == 'success') {
+                         window.location.href = '/Use_r/Index';
+                     }
                      //alert(ajaxresult);
                      // return ajaxresult;
                  },
