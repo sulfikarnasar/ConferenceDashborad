@@ -1,0 +1,113 @@
+﻿@model ConferenceDashborad.Models.UserProfile
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+   
+</head>
+   @Styles.Render("~/Content/css")
+    
+<body>
+   
+    <h2>Create Account</h2>
+    
+   <form role="form">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Username</label>
+    <input type="email" class="form-control" id="username_txt" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Name</label>
+    <input type="text" class="form-control" id="name_txt" placeholder="Name">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">District</label>
+    <input type="text" class="form-control" id="district_txt" placeholder="District">
+    
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">Contact</label>
+    <input type="text" class="form-control" id="Contact_txt" placeholder="Contact">
+    
+  </div>
+       <div class="form-group">
+    <label for="exampleInputFile">Password</label>
+    <input type="password" class="form-control" id="Password_txt" placeholder="Password">
+    
+  </div>
+       <div class="form-group">
+    <label for="exampleInputFile">Confirm Password</label>
+    <input type="password" class="form-control" id="cpassword_txt" placeholder="Confirm Password">
+    
+  </div>
+  <button type="submit" class="btn btn-primary" id="submit_btn">Submit</button>
+        <div class="alert alert-success" id="msg_area">
+          
+    </div>
+</form>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+     <script type="text/javascript">
+         function general() {
+             var entity = {};
+             entity.username = $('#username_txt').val();
+             entity.name = $('#name_txt').val();
+             entity.district = $('#district_txt').val();
+             entity.contact = $('#Contact_txt').val();
+             entity.password = $('#Password_txt').val();
+             var data = JSON.stringify(entity);
+
+             $.ajax({
+                 url: '/Registration/Register',
+                 type: 'POST',
+                 // contentType: "application/json;charset=utf-8",                         
+                 dataType: 'json',
+                 data: { "data": data },
+                 //traditional: true,
+                 success: function (ajaxresult) {
+                     //alert(ajaxresult);
+                     // return ajaxresult;
+                 },
+                 failure: function (ajaxresult, status) {
+                     console.log(ajaxresult)
+                 }
+             });
+         }
+         $(document).ready(function () {
+             $('#msg_area').hide();
+             $('#submit_btn').click(function () {
+                 var flag = true;
+                 debugger;
+                 if ($('#username_txt').val() == '' || $('#name_txt').val() == '' || $('#district_txt').val() == '' || $('#Contact_txt').val() == '' || $('#Password_txt').val() == '' || $('#cpassword_txt').val() == '') {
+                     $('#msg_area').html('Enter whole fields');
+                     $('#msg_area').show();
+                     $('#msg_area').fadeOut(3000);
+                     flag = false;
+                 }
+                 if ($('#Password_txt').val() != $('#cpassword_txt').val()) {
+                     flag = false;
+                     $('#msg_area').html('Password Missmatch!!!');
+                     $('#msg_area').show();
+                     $('#msg_area').fadeOut(3000);
+                 }
+                 if(flag==true) {
+                     general();
+                 }
+             });
+         });
+    </script>
+    <script src="/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/js/jquery.js"></script>  
+<script src="/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/js/bootstrap-typeahead.js"></script>  
+<script>
+    var subjects = ['Thiruvanathapuram', 'Kollam', 'Pathanamthitta', 'Alapuzha', 'Kottayam', 'Idukki', 'Ernakulam', 'Thrissur', 'Palakkad', 'Malapuram', 'Kozhikode', 'Wayanadu', 'Kannur', 'Kasaragod'];
+    $('#district_txt').typeahead({ source: subjects })
+</script>  
+</html>

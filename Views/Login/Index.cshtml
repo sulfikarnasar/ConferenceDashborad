@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+     @Styles.Render("~/Content/css")
+<body>
+    <h2>Login</h2>
+     <form role="form">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Username</label>
+    <input type="text" class="form-control" id="username_txt" placeholder="Username" required="required">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="password_txt" placeholder="Password" required="required">
+  </div>
+    <div class="alert alert-success" id="msg_area">
+          
+    </div>
+  <button type="button" class="btn btn-primary" id="login_btn">Login</button>
+  <button type="button" class="btn btn-default navbar-btn" onclick="javascript:window.location.href='/Registration/Index'">Sign up</button>
+</form>
+   
+</body>
+     @Scripts.Render("~/bundles/jquery")
+     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $('#msg_area').hide();
+            $('#login_btn').click(function () {
+                if ($('#username_txt').val() == '' || $('#password_txt').val() == '') {
+                    $('#msg_area').html('Enter username and password!!!');
+                    $('#msg_area').show();
+                    $('#msg_area').fadeOut(3000);
+                }
+                else {
+                    var entity = {};
+                    entity.username = $('#username_txt').val();
+                    entity.password = $('#password_txt').val();
+                    var data = JSON.stringify(entity);
+                    $.ajax({
+                        url: '/Login/Loginmethod',
+                        method: 'POST',
+                        data: { "data": data },
+                        //traditional: true,
+                        success: function (data) {
+                            if (data.data == 'Admin') {
+                                window.location.href = '/Admin/Index';
+                            }
+                            else if (data.data == 'User') {
+                                window.location.href = '/Use_r/Index';
+                            }
+                            else if (data.data == 'failure') {
+                                debugger;
+                                $('#msg_area').html('Invalid username and password!!!');
+                                $('#msg_area').show();
+                                $('#msg_area').fadeOut(3000);
+
+                            }
+                            //alert('success');
+                            //alert(data.data);
+                            //alert(ajaxresult);
+                            // return ajaxresult;
+                        },
+                        error: function (data) {
+                            debugger;
+                            alert('fail');
+                            console.log(data);
+                            alert(data.data);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</html>

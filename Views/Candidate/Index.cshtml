@@ -1,0 +1,143 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+     @Styles.Render("~/Content/css")
+<body>
+    <form role="form">
+  <div class="form-group">
+      <label for="exampleInputFile">Name</label>
+   <input type="text" class="form-control" id="name_txt" placeholder="Name">
+      <label for="exampleInputFile">Gender</label>
+       <div class="col-lg-10">
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-default">
+            <input type="radio" name="inputLogType" id="splunk">Male
+          </label>
+          <label class="btn btn-default">
+            <input type="radio" name="inputLogType" id="pig">Female
+          </label>
+        </div>          
+      </div>    
+  <label for="exampleInputFile">Age</label>
+   <input type="text" class="form-control" id="age_txt" placeholder="Age">
+      <label for="exampleInputFile">Class</label>
+   <input type="text" class="form-control" id="class_txt" placeholder="Class">
+      <label for="exampleInputFile">School</label>
+   <input type="text" class="form-control" id="school_txt" placeholder="School">
+      <label for="exampleInputFile">Address</label>
+      <textarea class="form-control" id="address_txt" placeholder="Address" ></textarea>
+   
+      <label for="exampleInputFile">Area</label>
+      
+   <select id="AreaList">
+   <option value="select">Select</option>
+   </select>
+          
+    <label for="exampleInputFile">Contact</label>
+   <input type="text" class="form-control" id="contact_txt" placeholder="Contact">
+  <button type="button" class="btn btn-default" id="submit_btn">Submit</button>
+  </div>
+       <div class="alert alert-success" id="msg_area">
+          
+    </div>
+</form>
+</body>
+    @Scripts.Render("~/bundles/jquery")
+     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        $.ajax({
+            url: '/Candidate/getAreaList',
+            method: 'POST',
+            data: { },
+            //traditional: true,
+            success: function (data) {
+                
+                
+                for (var i = 0; i < data.data.length; i++) {
+                    
+                    $('#AreaList option:last').after('<option value="' + data.data[i].Area + '" name="'+data.data[i].AreaId+'">' + data.data[i].Area + '</option>');
+                }
+                
+                //alert('success');
+                //alert(data.data);
+                //alert(ajaxresult);
+                // return ajaxresult;
+            },
+            error: function (data) {
+                debugger;
+                alert('fail');
+                console.log(data);
+                alert(data.data);
+            }
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#msg_area').hide();
+            $('#submit_btn').click(function () {
+                debugger;
+                var entity = {};
+                var areaId = $('#AreaList :selected').attr('name');
+                var gernder=false;
+                if ($('#splunk').is(':checked'))
+                { gernder= true;}
+                else if ($('#pig').is(':checked'))
+                { gernder=false; }
+                else
+                {
+                    alert('select gender');
+                }
+                entity.Name = $('#name_txt').val();
+                entity.Gender = gernder;
+                entity.Age = $('#age_txt').val();
+                entity.Cls = $('#class_txt').val();
+                entity.School = $('#school_txt').val();
+                entity.Address = $('#address_txt').val();
+                entity.AreaId = areaId;
+                entity.Contact = $('#contact_txt').val();
+                var data = JSON.stringify(entity);
+                $.ajax({
+                    url: '/Candidate/submitData',
+                    method: 'POST',
+                    data: {"data":data},
+                    //traditional: true,
+                    success: function (data) {
+                        if (data.data == 'success') {
+                            $('#msg_area').html('Candidated Registered');
+                            
+                        }
+                        else {
+                            $('#msg_area').html('Try Again!!!');
+                           
+                        }
+                        $('#msg_area').show();
+                        $('#msg_area').fadeOut(3000);
+
+                        //alert('success');
+                        //alert(data.data);
+                        //alert(ajaxresult);
+                        // return ajaxresult;
+                    },
+                    error: function (data) {
+                        $('#msg_area').html('Try Again!!!');
+                        $('#msg_area').show();
+                        $('#msg_area').fadeOut(3000);
+                        //debugger;
+                        //alert('fail');
+                        //console.log(data);
+                        //alert(data.data);
+                    }
+                });
+            });
+        });
+    </script>
+</html>

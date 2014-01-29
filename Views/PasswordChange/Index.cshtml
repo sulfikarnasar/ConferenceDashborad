@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+     @Styles.Render("~/Content/css")
+</head>
+<body>
+    <h1>Change Password</h1>
+    <form role="form">
+  <div class="form-group">
+    
+    <input type="password" class="form-control" id="cpassword" placeholder="Current Password">
+  </div>
+  <div class="form-group">
+   
+    <input type="password" class="form-control" id="npassword" placeholder="New Password">
+  </div>
+  <div class="form-group">
+   
+    <input type="password" class="form-control" id="confpassword" placeholder="Confirm Password">
+  </div>
+  <div class="alert alert-danger" id="password_msg">
+      Password missmatch!!!
+  </div>
+        <div class="alert alert-success" id="success_msg">
+          Password changed Successfully  
+        </div>
+  <button type="button" class="btn btn-default" id="update_btn">Update</button>
+</form>
+</body>
+     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#password_msg').hide();
+            $('#success_msg').hide();
+            
+            $('#update_btn').click(function () {
+                if ($('#npassword').val() != $('#confpassword').val()) {
+                    $('#password_msg').show();
+                    $('#password_msg').fadeIn('slow');
+                }
+                else {
+                    var entity = {};
+                    entity.CurrentPass = $('#cpassword').val();
+                    entity.NewPass = $('#npassword').val();
+                    var data = JSON.stringify(entity);
+                    $.ajax({
+                        url: '/PasswordChange/ResetPassword',
+                        method: 'POST',
+                        data: { "data": data },
+                        //traditional: true,
+                        success: function (data) {
+                            
+                            if (data.data == 'success') {
+                                $('#success_msg').show();
+                                $('#success_msg').fadeOut(3000);
+                            }
+                            //alert('success');
+                            //alert(data.data);
+                            //alert(ajaxresult);
+                            // return ajaxresult;
+                        },
+                        error: function (data) {
+                            debugger;
+                            alert('fail');
+                            console.log(data);
+                            alert(data.data);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</html>

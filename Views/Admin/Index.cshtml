@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+     @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="jumbotron">
+  <h1>Conference Board</h1>
+ 
+  <p>
+     <input type="button" id="area_btn" class="btn btn-primary btn-lg" value="Area Details" onclick="javascript: window.location.href = '/AreaSettings/Index'"/>
+     <input type="button" id="changepassword_btn" class="btn btn-primary btn-lg" value="Change Password" onclick="javascript:window.location.href='/PasswordChange/Index'"/>
+  </p>
+</div>
+    
+     @Scripts.Render("~/bundles/jquery")
+</body>
+</html>

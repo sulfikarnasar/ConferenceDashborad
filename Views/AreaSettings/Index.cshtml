@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+@Styles.Render("~/Content/css")
+<h2>Area Settings</h2>
+<form role="form">
+  <div class="form-group">
+    <label for="exampleInputEmail1">District</label>
+    <input type="text" class="form-control" id="District_txt" data-provide="typeahead" data-items="4" placeholder="District">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Area</label>
+    <input type="text" class="form-control" id="Area_txt" placeholder="Area">
+  </div>
+  <button type="button" class="btn btn-default" id="submit_btn">Submit</button>
+</form>
+<div class="alert alert-success" id="success_msg">
+    Area added successfully
+</div>
+<div class="alert alert-danger" id="failure_msg">
+    Try again!!!
+</div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#success_msg').hide();
+        $('#failure_msg').hide();
+        $('#submit_btn').click(function () {
+            var entity = {};
+            entity.District = $('#District_txt').val();
+            entity.Area = $('#Area_txt').val();
+            var data = JSON.stringify(entity);
+            $.ajax({
+                url: '/AreaSettings/AreaSubmition',
+                method: 'POST',
+                data: { "data": data },
+                //traditional: true,
+                success: function (data) {
+                    if (data.data == 'success') {
+                        $('#success_msg').show();
+                        $('#success_msg').fadeOut(3000);
+                    }
+                    else if (data.data == 'failure') {
+                        $('#failure_msg').show();
+                        $('#failure_msg').fadeOut(3000);
+                    }
+                    //alert('success');
+                    //alert(data.data);
+                    //alert(ajaxresult);
+                    // return ajaxresult;
+                },
+                error: function (data) {
+                    debugger;
+                    alert('fail');
+                    console.log(data);
+                    alert(data.data);
+                }
+            });
+        });
+    });
+</script>
+<script src="/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/js/jquery.js"></script>  
+<script src="/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/js/bootstrap-typeahead.js"></script>  
+<script>
+    var subjects = ['Thiruvanathapuram', 'Kollam', 'Pathanamthitta', 'Alapuzha', 'Kottayam', 'Idukki', 'Ernakulam', 'Thrissur', 'Palakkad','Malapuram','Kozhikode','Wayanadu','Kannur','Kasaragod'];
+    $('#District_txt').typeahead({ source: subjects })
+</script>  
